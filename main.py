@@ -54,9 +54,9 @@ try:
 	while True:
 		time.sleep(60)
 		#update the ip's of the miners
-		os.command('python mactoip.py')
+		os.system('python mactoip.py')
 		#download the blocks
-		os.command('communicate_to_miners.py')
+		os.system('communicate_to_miners.py')
 		balance = check_balance()
 		print(balance)
 except KeyboardInterrupt:
