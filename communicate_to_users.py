@@ -1,31 +1,33 @@
 import sys
 import socket
 import threading
-
 import socket
 import sys
 import threading
 import random
 
-def add_new_miner(mac):
+def add_new_miner(mac_address):
 	# we add a new miner for implementing it into the 
 	# next block we mine
 	with open('new_miners.log', 'a') as file:
-		mac = mac.decode('utf-8')
-		file.write(mac+'\n')
+		mac_addr = mac.decode('utf-8')
+		file.write(mac_addr+'\n')
 
 def add_new_transaction(transaction):
 	#add new transaction to our pending transactions list
 	#we first check the balance and in case it has the
-	#the necessary amount for doing the transaction, this one
+	#the necessary amount for doing the transaction, it
 	#will be executed
 	address_balance = 0
 
 	transaction_parts = [splitted_part for splitted_part in transaction.split(', ')]
+	#the transaction address of the sender is the first element in the string list
 	tx_address = transaction_parts[0][1:]
+	#the amount it sends
 	tx_amount = transaction_parts[2][:transaction_parts[2].index('E')]
 
 	with open('blocks.csv', 'r') as file:
+		#read all the blocks in our database to check for the sender balance
 		blocks = file.readlines()
 	for block in blocks:
 		if tx_address in block:

@@ -52,12 +52,15 @@ def check_balance():
 #will run constantly
 try:
 	while True:
-		time.sleep(60)
+		#time.sleep(60)
 		#update the ip's of the miners
+		print("Updating the list of available miners...")
 		os.system('python mactoip.py')
 		#download the blocks
-		os.system('communicate_to_miners.py')
+		print("Trying to communicate to other miners...")
+		os.system('python communicate_to_miners.py')
 		balance = check_balance()
+		print("Your balance is...")
 		print(balance)
 except KeyboardInterrupt:
 	print("Closing...")

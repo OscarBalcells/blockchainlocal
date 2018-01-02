@@ -1,12 +1,16 @@
 import os
+import sys
 
 #open the miners log file and read the content
 with open('miners_mac_addresses.log', 'r') as file:
 	lines = file.readlines()
 	lines = [line.strip() for line in lines]
 	# we then store the data in two separate arrays
-	mac_addresses = [item.split(' ')[0] for item in lines]
-	trust_points = [int(item.split(' ')[1]) for item in lines]
+	if len(lines[0]) > 0:
+		mac_addresses = [item.split(' ')[0] for item in lines]
+	else:
+		print("No mac addresses found")
+		sys.exit()
 
 #execute the command and read the output
 os.system('arp -a > tmp')
@@ -32,33 +36,18 @@ for command in command_output:
 #erase the whole ipminers.log because it will be updated
 open('miners_ip_addresses.log', 'w').close()
 
-final_unorganized_ip_addresses = ["0" for i in range(len(trust_points))]
+final_ip_addresses = ["0" for i in range(len(mac_addresses))]
 
 for i in range(len(command_output_ip)):
 	try:
 		index = mac_addresses.index(command_output_mac[i])		
-		final_unorganized_ip_addresses[index] = command_output_ip[i]
+		final_ip_addresses[index] = command_output_ip[i]
 	except ValueError:
 		pass
 
-final_organized_ip_addresses = []
-
-def RecursiveCheckForIps():
-	maximum_trusted = final_unorganized_ip_addresses[trust_points.index(max(trust_points))]
-	if len(maximum_trusted) > 3:
-		final_organized_ip_addresses.append(maximum_trusted)
-
-	final_unorganized_ip_addresses.remove(maximum_trusted)
-	trust_points.remove(max(trust_points))
-	if len(final_unorganized_ip_addresses) > 0:
-		RecursiveCheckForIps()
-
-RecursiveCheckForIps()
-
-print final_organized_ip_addresses
-
+print(final_ip_addresses)
 with open('miners_ip_addresses.log', 'w') as file:
-	for i in final_organized_ip_addresses:
+	for i in final_ip_addresses:
 		file.write(i + '\n')
 
 
