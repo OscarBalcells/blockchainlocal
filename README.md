@@ -1,2 +1,2 @@
 # blockchainlocal
-Basic project I dead for learning how the blockchain technology works
+Very basic blockchain running on python in a local network
